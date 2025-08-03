@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login & Signup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      width: 300px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .toggle {
+      text-align: center;
+      margin-top: 1rem;
+      cursor: pointer;
+      color: #007bff;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="formTitle">Login</h2>
+    
+    <form id="authForm">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="password" id="confirmPassword" class="hidden" placeholder="Confirm Password" />
+      <p class="error" id="errorMsg"></p>
+      <button type="submit" id="submitBtn">Login</button>
+    </form>
+
+    <div class="toggle" id="toggleForm">Don't have an account? Sign up</div>
+  </div>
+
+  <script>
+    const form = document.getElementById('authForm');
+    const formTitle = document.getElementById('formTitle');
+    const toggleForm = document.getElementById('toggleForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const errorMsg = document.getElementById('errorMsg');
+    let isSignup = false;
+
+    toggleForm.addEventListener('click', () => {
+      isSignup = !isSignup;
+      formTitle.textContent = isSignup ? 'Sign Up' : 'Login';
+      submitBtn.textContent = isSignup ? 'Sign Up' : 'Login';
+      toggleForm.textContent = isSignup ? 'Already have an account? Login' : "Don't have an account? Sign up";
+      confirmPassword.classList.toggle('hidden', !isSignup);
+      errorMsg.textContent = '';
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const confirmPass = confirmPassword.value.trim();
+
+      if (!username || !password || (isSignup && !confirmPass)) {
+        errorMsg.textContent = 'Please fill in all fields.';
+        return;
+      }
+
+      if (password.length < 6) {
+        errorMsg.textContent = 'Password must be at least 6 characters.';
+        return;
+      }
+
+      if (isSignup && password !== confirmPass) {
+        errorMsg.textContent = 'Passwords do not match.';
+        return;
+      }
+
+      // Simulate login or signup success
+      localStorage.setItem('user', username);
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>
